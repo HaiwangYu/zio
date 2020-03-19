@@ -218,10 +218,10 @@ message_t encode(const Range &parts)
 
         // big part
         *buf++ = std::numeric_limits<uint8_t>::max();
-        *buf++ = (part_size >> 24) & std::numeric_limits<std::uint8_t>::max();
-        *buf++ = (part_size >> 16) & std::numeric_limits<std::uint8_t>::max();
-        *buf++ = (part_size >> 8) & std::numeric_limits<std::uint8_t>::max();
         *buf++ = part_size & std::numeric_limits<std::uint8_t>::max();
+        *buf++ = (part_size >> 8) & std::numeric_limits<std::uint8_t>::max();
+        *buf++ = (part_size >> 16) & std::numeric_limits<std::uint8_t>::max();
+        *buf++ = (part_size >> 24) & std::numeric_limits<std::uint8_t>::max();
         memcpy(buf, part_data, part_size);
         buf += part_size;
     }
@@ -255,8 +255,8 @@ template<class OutputIt> OutputIt decode(const message_t &encoded, OutputIt out)
                 throw std::out_of_range(
                   "Malformed encoding, overflow in reading size");
             }
-            part_size = ((uint32_t) source[0] << 24) + ((uint32_t) source[1] << 16)
-                        + ((uint32_t) source[2] << 8) + (uint32_t) source[3];
+            part_size = ((uint32_t) source[3] << 24) + ((uint32_t) source[2] << 16)
+                        + ((uint32_t) source[1] << 8) + (uint32_t) source[0];
             source += 4;
         }
 
