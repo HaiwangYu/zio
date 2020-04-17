@@ -4,6 +4,7 @@ build
 testdata
 cut
 waf
+.waf*
 *.ipc
 ltximg
 venv

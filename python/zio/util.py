@@ -5,6 +5,7 @@ Utilities
 
 import zmq
 import struct
+import sys
 
 socket_names = [
     "PAIR",

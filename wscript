@@ -24,7 +24,7 @@ def configure(cfg):
 def build(bld):
     uses='ZMQ CZMQ ZYRE SPDLOG'.split()
 
-    rpath = [bld.env["PREFIX"] + '/lib', bld.path.find_or_declare(bld.out_dir)]
+    rpath = [bld.env["PREFIX"] + '/lib64', bld.path.find_or_declare(bld.out_dir)]
     rpath += [bld.env["LIBPATH_%s"%u][0] for u in uses]
     rpath = list(set(rpath))
              
@@ -53,6 +53,7 @@ def build(bld):
                     use = ['zio'] + uses)
 
     bld.install_files('${PREFIX}/include/zio', bld.path.ant_glob("inc/zio/*.hpp"))
+    bld.install_files('${PREFIX}/include/zio/domo', bld.path.ant_glob("inc/zio/domo/*.hpp"))
 
     # fake pkg-config
     bld(source='libzio.pc.in', VERSION=VERSION,
@@ -61,7 +62,7 @@ def build(bld):
     bld(features='subst',
         source='libzio.la.in', target='libzio.la',
         **bld.env)
-    bld.install_files('${PREFIX}/lib', bld.path.find_or_declare("libzio.la"))
+    bld.install_files('${PREFIX}/lib64', bld.path.find_or_declare("libzio.la"))
     
     from waflib.Tools import waf_unit_test
     bld.add_post_fun(waf_unit_test.summary)
